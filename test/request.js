@@ -54,19 +54,21 @@ test('`text` with body larger than limit throws error', async t => {
   const request = new Request();
   request[internal] = { body: stream, headers: {}, limit: '1b' };
 
-  const { statusCode, message } = await t.throwsAsync(_ => request.json());
+  const { vitro, code, message } = await t.throwsAsync(_ => request.json());
 
-  t.is(statusCode, 413);
-  t.is(message, 'Body has exceeded 1b limit');
+  t.true(vitro);
+  t.is(code, 'VITRO_BODY_EXCEEDED');
+  t.is(message, 'Body limit exceeded');
 });
 
 test('`text` with invalid body throws error', async t => {
   const request = new Request();
   request[internal] = { body: {}, headers: {} };
 
-  const { statusCode, message } = await t.throwsAsync(_ => request.json());
+  const { vitro, code, message } = await t.throwsAsync(_ => request.json());
 
-  t.is(statusCode, 400);
+  t.true(vitro);
+  t.is(code, 'VITRO_BODY_INVALID');
   t.is(message, 'Invalid body');
 });
 
@@ -93,9 +95,10 @@ test('`json` with invalid json throws error', async t => {
   const request = new Request();
   request[internal] = { body: stream, headers: {} };
 
-  const { statusCode, message } = await t.throwsAsync(_ => request.json());
+  const { vitro, code, message } = await t.throwsAsync(_ => request.json());
 
-  t.is(statusCode, 400);
+  t.true(vitro);
+  t.is(code, 'VITRO_BODY_JSON_INVALID');
   t.is(message, 'Invalid json');
 });
 
