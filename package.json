@@ -50,7 +50,7 @@
       "plugin:prettier/recommended"
     ],
     "parserOptions": {
-      "ecmaVersion": 8
+      "ecmaVersion": 9
     },
     "env": {
       "es6": true,
