@@ -17,25 +17,16 @@ test('get `ok` with succesful status returns true', t => {
   const response = new Response();
   response[internal] = { status: 200 };
 
-  const actual = Object.keys(STATUS_CODES)
-    .map(parseInt)
-    .reduce((status, results) => {
-      const response = new Response();
-      response[internal] = { status };
+  Object.keys(STATUS_CODES).forEach(key => {
+    const status = parseInt(key);
+    const response = new Response();
+    response[internal] = { status };
 
-      return { ...results, [status]: response.ok };
-    });
-
-  const expected = Object.keys(STATUS_CODES)
-    .map(parseInt)
-    .reduce((status, results) => {
-      const response = new Response();
-      response[internal] = { status };
-
-      return { ...results, [status]: status > 199 && status < 300 };
-    });
-
-  t.deepEqual(actual, expected);
+    t.deepEqual(
+      { status, ok: response.ok },
+      { status, ok: status > 199 && status < 300 }
+    );
+  });
 });
 
 test('get `redirected` throws not supported error', t => {
