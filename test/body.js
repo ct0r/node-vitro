@@ -1,13 +1,13 @@
 const test = require('ava');
 
 const Body = require('../lib/body');
-const { internal } = require('../lib/symbols');
 
 test('get `body` returns body', t => {
   const body = new Body();
-  body[internal] = { body: {} };
 
-  t.is(body.body, body[internal].body);
+  const err = t.throws(() => body.body);
+
+  t.is(err.message, 'Not supported');
 });
 
 test('get `bodyUsed` throws not supported error', t => {

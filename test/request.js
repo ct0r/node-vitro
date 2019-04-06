@@ -2,23 +2,9 @@ const { Readable } = require('stream');
 
 const test = require('ava');
 
+const Body = require('../lib/body');
 const Request = require('../lib/request');
 const { internal } = require('../lib/symbols');
-
-test('get `body` returns body', t => {
-  const request = new Request();
-  request[internal] = { body: {} };
-
-  t.is(request.body, request[internal].body);
-});
-
-test('get `bodyUsed` throws not supported error', t => {
-  const request = new Request();
-
-  const err = t.throws(() => request.bodyUsed);
-
-  t.is(err.message, 'Not supported');
-});
 
 test('get `cache` throws not supported error', t => {
   const request = new Request();
@@ -105,34 +91,10 @@ test('get `url` returns url', t => {
   t.is(request.url, request[internal].url);
 });
 
-test('`arrayBuffer` throws not supported error', t => {
-  const request = new Request();
-
-  const err = t.throws(() => request.arrayBuffer());
-
-  t.is(err.message, 'Not supported');
-});
-
-test('`blob` throws not supported error', t => {
-  const request = new Request();
-
-  const err = t.throws(() => request.blob());
-
-  t.is(err.message, 'Not supported');
-});
-
 test('`clone` throws not supported error', t => {
   const request = new Request();
 
   const err = t.throws(() => request.clone());
-
-  t.is(err.message, 'Not supported');
-});
-
-test('`formData` throws not supported error', t => {
-  const request = new Request();
-
-  const err = t.throws(() => request.formData());
 
   t.is(err.message, 'Not supported');
 });
@@ -204,4 +166,8 @@ test('`text` with invalid body throws error', async t => {
   t.true(vitro);
   t.is(code, 'VITRO_BODY_INVALID');
   t.is(message, 'Invalid body');
+});
+
+test('`Response` extends `Body`', t => {
+  t.true(new Request() instanceof Body);
 });
