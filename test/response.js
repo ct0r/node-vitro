@@ -6,13 +6,6 @@ const Body = require('../lib/body');
 const Response = require('../lib/response');
 const { internal } = require('../lib/symbols');
 
-test('get `headers` returns headers', t => {
-  const response = new Response();
-  response[internal] = { headers: {} };
-
-  t.is(response.headers, response[internal].headers);
-});
-
 test('get `ok` with succesful status returns true', t => {
   const response = new Response();
   response[internal] = { status: 200 };
