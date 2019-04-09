@@ -53,18 +53,16 @@ test('`formData` throws not supported error', t => {
 });
 
 test('`json` returns body as object', async t => {
-  const body = { module: 'vitro' };
-
   const stream = new Readable();
-  stream.push(JSON.stringify(body));
+  stream.push(JSON.stringify({ module: 'vitro' }));
   stream.push(null);
 
-  const request = new Body();
-  request[internal] = { body: stream, headers: {} };
+  const body = new Body();
+  body[internal] = { body: stream, headers: {} };
 
-  const obj = await request.json();
+  const obj = await body.json();
 
-  t.deepEqual(obj, body);
+  t.deepEqual(obj, { module: 'vitro' });
 });
 
 test('`json` with invalid json throws error', async t => {
@@ -72,13 +70,12 @@ test('`json` with invalid json throws error', async t => {
   stream.push('invalid json');
   stream.push(null);
 
-  const request = new Body();
-  request[internal] = { body: stream, headers: {} };
+  const body = new Body();
+  body[internal] = { body: stream, headers: {} };
 
-  const { vitro, code, message } = await t.throwsAsync(() => request.json());
+  const { status, message } = await t.throwsAsync(() => body.json());
 
-  t.true(vitro);
-  t.is(code, 'VITRO_BODY_JSON_INVALID');
+  t.is(status, 400);
   t.is(message, 'Invalid json');
 });
 
@@ -87,25 +84,24 @@ test('`text` returns body as string', async t => {
   stream.push('body');
   stream.push(null);
 
-  const request = new Body();
-  request[internal] = { body: stream, headers: {} };
+  const body = new Body();
+  body[internal] = { body: stream, headers: {} };
 
-  const text = await request.text();
+  const text = await body.text();
 
   t.is(text, 'body');
 });
 
 test('`text` with body larger than limit throws error', async t => {
   const stream = new Readable();
-  stream.push('more than 1b of text');
+  stream.push(new Array(50000).fill('0123456789').join('01234567890'));
   stream.push(null);
 
-  const request = new Body();
-  request[internal] = { body: stream, headers: {}, limit: '1b' };
+  const body = new Body();
+  body[internal] = { body: stream, headers: {}, limit: '1b' };
 
-  const { vitro, code, message } = await t.throwsAsync(() => request.json());
+  const { status, message } = await t.throwsAsync(() => body.text());
 
-  t.true(vitro);
-  t.is(code, 'VITRO_BODY_EXCEEDED');
+  t.is(status, 413);
   t.is(message, 'Body limit exceeded');
 });
