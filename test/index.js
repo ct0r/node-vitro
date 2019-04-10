@@ -9,6 +9,29 @@ const { Response } = vitro;
 
 const getUrl = fn => listen(vitro(fn));
 
+test('`handle` sets request body`', async t => {
+  const fn = async req => {
+    t.is(await req.text(), 'A martini. Shaken, not stirred.');
+  };
+
+  const url = await getUrl(fn);
+  await fetch(url, { method: 'POST', body: 'A martini. Shaken, not stirred.' });
+});
+
+test('`handle` sets request headers`', async t => {
+  const fn = ({ headers }) => t.is(headers.get('cache-control'), 'no-cache');
+
+  const url = await getUrl(fn);
+  await fetch(url, { headers: { 'cache-control': 'no-cache' } });
+});
+
+test('`handle` sets request method`', async t => {
+  const fn = ({ method }) => t.is(method, 'POST');
+
+  const url = await getUrl(fn);
+  await fetch(url, { method: 'POST' });
+});
+
 test('`handle` sends given status', async t => {
   const fn = () => new Response(null, { status: 204 });
 
