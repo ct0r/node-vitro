@@ -1,8 +1,9 @@
 # vitro
 
-[![CircleCI](https://circleci.com/gh/ct0r/vitro.svg?style=svg)](https://circleci.com/gh/ct0r/vitro)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/170b1d332c2400e522e9/test_coverage)](https://codeclimate.com/github/ct0r/vitro/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/170b1d332c2400e522e9/maintainability)](https://codeclimate.com/github/ct0r/vitro/maintainability)
+[![Version](https://img.shields.io/github/package-json/v/ct0r/vitro.svg?style=flat-square)](https://github.com/ct0r/vitro/blob/master/package.json)
+[![Build](https://img.shields.io/circleci/project/github/ct0r/vitro/master.svg?style=flat-square)](https://circleci.com/gh/ct0r/vitro)
+[![Coverage](https://img.shields.io/codeclimate/coverage/ct0r/vitro.svg?style=flat-square)](https://codeclimate.com/github/ct0r/vitro)
+[![License](https://img.shields.io/github/license/ct0r/vitro.svg?style=flat-square)](https://github.com/ct0r/vitro/blob/master/LICENSE)
 
 [Fetch API] based web framework.
 
