@@ -1,7 +1,7 @@
 {
   "name": "vitro",
   "version": "0.1.3",
-  "description": "Fetch API based web framework",
+  "description": "",
   "main": "lib/index.js",
   "scripts": {
     "test": "ava test/**",
@@ -13,15 +13,7 @@
     "url": "git+https://github.com/ct0r/vitro.git"
   },
   "keywords": [
-    "vitro",
-    "web",
-    "api",
-    "http",
-    "framework",
-    "micro",
-    "service",
-    "microservice",
-    "serverless"
+    "vitro"
   ],
   "author": "ct0r",
   "license": "MIT",
