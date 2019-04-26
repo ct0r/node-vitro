@@ -46,7 +46,7 @@ jobs:
           at: ~/vitro
       - run:
           name: Authenticate to NPM
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/vitro/.npmrc
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: Publish package
           command: npm publish
@@ -63,6 +63,7 @@ workflows:
           requires:
             - test
           filters:
+            context: js
             tags:
               only: /^v.*/
             branches:
