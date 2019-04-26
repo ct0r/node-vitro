@@ -60,10 +60,10 @@ workflows:
             tags:
               only: /^v.*/
       - publish:
+          context: js
           requires:
             - test
           filters:
-            context: js
             tags:
               only: /^v.*/
             branches:
