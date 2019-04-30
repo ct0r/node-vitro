@@ -1,24 +1,27 @@
 const test = require('ava');
 
 const Headers = require('../lib/headers');
-const { internal: map } = require('../lib/symbols');
 
 test('`new` without init creates empty headers', t => {
   const headers = new Headers();
 
-  t.is(headers[map].size, 0);
+  t.deepEqual(Object.fromEntries(headers.entries()), {});
 });
 
 test('`new` with init as object creates headers', t => {
   const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
-  t.is(headers[map].get('accept-encoding'), 'deflate');
+  t.deepEqual(Object.fromEntries(headers.entries()), {
+    'accept-encoding': 'deflate'
+  });
 });
 
 test('`new` with init as iterable creates headers', t => {
   const headers = new Headers([['Accept-Encoding', 'deflate']]);
 
-  t.is(headers[map].get('accept-encoding'), 'deflate');
+  t.deepEqual(Object.fromEntries(headers.entries()), {
+    'accept-encoding': 'deflate'
+  });
 });
 
 test('`append` with new name adds new entry', t => {
@@ -27,17 +30,20 @@ test('`append` with new name adds new entry', t => {
   const result = headers.append('Accept-Encoding', 'deflate');
 
   t.is(result, undefined);
-  t.is(headers[map].get('accept-encoding'), 'deflate');
+  t.deepEqual(Object.fromEntries(headers.entries()), {
+    'accept-encoding': 'deflate'
+  });
 });
 
 test('`append` with existing name appends given value onto the end', t => {
-  const headers = new Headers();
-  headers[map].set('accept-encoding', 'deflate');
+  const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
   const result = headers.append('Accept-Encoding', 'gzip');
 
   t.is(result, undefined);
-  t.is(headers[map].get('accept-encoding'), 'deflate, gzip');
+  t.deepEqual(Object.fromEntries(headers.entries()), {
+    'accept-encoding': 'deflate, gzip'
+  });
 });
 
 test('`append` with invalid name throws error', t => {
@@ -54,17 +60,18 @@ test('`append` converts value to string', t => {
   const result = headers.append('Content-Length', 321);
 
   t.is(result, undefined);
-  t.is(headers[map].get('content-length'), '321');
+  t.deepEqual(Object.fromEntries(headers.entries()), {
+    'content-length': '321'
+  });
 });
 
 test('`delete` removes element with given name', t => {
-  const headers = new Headers();
-  headers[map].set('accept-encoding', 'deflate');
+  const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
   const result = headers.delete('Accept-Encoding');
 
   t.is(result, undefined);
-  t.false(headers[map].has('accept-encoding'));
+  t.deepEqual(Object.fromEntries(headers.entries()), {});
 });
 
 test('`delete` with invalid name throws error', t => {
@@ -76,20 +83,16 @@ test('`delete` with invalid name throws error', t => {
 });
 
 test('`entries` returns entry iterator', t => {
-  const headers = new Headers();
-  headers[map].set('accept-encoding', 'deflate');
+  const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
-  const iterator = headers.entries()[Symbol.iterator]();
-  const value = iterator.next().value;
-  const done = iterator.next().done;
+  const iterator = headers.entries();
 
-  t.deepEqual(value, ['accept-encoding', 'deflate']);
-  t.true(done);
+  t.deepEqual(iterator.next().value, ['accept-encoding', 'deflate']);
+  t.true(iterator.next().done);
 });
 
 test('`get` with existing name returns value', t => {
-  const headers = new Headers();
-  headers[map].set('accept-encoding', 'deflate');
+  const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
   const result = headers.get('Accept-Encoding');
 
@@ -113,8 +116,7 @@ test('`get` with invalid name throws error', t => {
 });
 
 test('`has` with existing name returns true', t => {
-  const headers = new Headers();
-  headers[map].set('accept-encoding', 'deflate');
+  const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
   const result = headers.has('Accept-Encoding');
 
@@ -138,10 +140,9 @@ test('`has` with invalid name throws error', t => {
 });
 
 test('`keys` returns key iterator', t => {
-  const headers = new Headers();
-  headers[map].set('accept-encoding', 'deflate');
+  const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
-  const iterator = headers.keys()[Symbol.iterator]();
+  const iterator = headers.keys();
   const value = iterator.next().value;
   const done = iterator.next().done;
 
@@ -155,17 +156,20 @@ test('`set` with non-existing name adds a new entry', t => {
   const result = headers.set('Accept-Encoding', 'deflate');
 
   t.is(result, undefined);
-  t.is(headers[map].get('accept-encoding'), 'deflate');
+  t.deepEqual(Object.fromEntries(headers.entries()), {
+    'accept-encoding': 'deflate'
+  });
 });
 
 test('`set` with existing name sets a new value', t => {
-  const headers = new Headers();
-  headers[map].set('accept-encoding', 'deflate');
+  const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
   const result = headers.set('Accept-Encoding', 'gzip');
 
   t.is(result, undefined);
-  t.is(headers[map].get('accept-encoding'), 'gzip');
+  t.deepEqual(Object.fromEntries(headers.entries()), {
+    'accept-encoding': 'gzip'
+  });
 });
 
 test('`set` converts value to string', t => {
@@ -174,7 +178,9 @@ test('`set` converts value to string', t => {
   const result = headers.set('Content-Length', 321);
 
   t.is(result, undefined);
-  t.is(headers[map].get('content-length'), '321');
+  t.deepEqual(Object.fromEntries(headers.entries()), {
+    'content-length': '321'
+  });
 });
 
 test('`set` with invalid name throws error', t => {
@@ -186,13 +192,21 @@ test('`set` with invalid name throws error', t => {
 });
 
 test('`values` returns value iterator', t => {
-  const headers = new Headers();
-  headers[map].set('accept-encoding', 'deflate');
+  const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
-  const iterator = headers.values()[Symbol.iterator]();
+  const iterator = headers.values();
   const value = iterator.next().value;
   const done = iterator.next().done;
 
   t.deepEqual(value, 'deflate');
   t.true(done);
+});
+
+test('`Symbol.iterator` returns entry iterator', t => {
+  const headers = new Headers({ 'Accept-Encoding': 'deflate' });
+
+  const iterator = headers.entries();
+
+  t.deepEqual(iterator.next().value, ['accept-encoding', 'deflate']);
+  t.true(iterator.next().done);
 });
