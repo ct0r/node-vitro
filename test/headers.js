@@ -5,13 +5,13 @@ const Headers = require('../lib/headers');
 test('`new` without init creates empty headers', t => {
   const headers = new Headers();
 
-  t.deepEqual(Object.fromEntries(headers.entries()), {});
+  t.deepEqual(Object.fromEntries(headers), {});
 });
 
 test('`new` with init as object creates headers', t => {
   const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
-  t.deepEqual(Object.fromEntries(headers.entries()), {
+  t.deepEqual(Object.fromEntries(headers), {
     'accept-encoding': 'deflate'
   });
 });
@@ -19,7 +19,7 @@ test('`new` with init as object creates headers', t => {
 test('`new` with init as iterable creates headers', t => {
   const headers = new Headers([['Accept-Encoding', 'deflate']]);
 
-  t.deepEqual(Object.fromEntries(headers.entries()), {
+  t.deepEqual(Object.fromEntries(headers), {
     'accept-encoding': 'deflate'
   });
 });
@@ -30,7 +30,7 @@ test('`append` with new name adds new entry', t => {
   const result = headers.append('Accept-Encoding', 'deflate');
 
   t.is(result, undefined);
-  t.deepEqual(Object.fromEntries(headers.entries()), {
+  t.deepEqual(Object.fromEntries(headers), {
     'accept-encoding': 'deflate'
   });
 });
@@ -41,7 +41,7 @@ test('`append` with existing name appends given value onto the end', t => {
   const result = headers.append('Accept-Encoding', 'gzip');
 
   t.is(result, undefined);
-  t.deepEqual(Object.fromEntries(headers.entries()), {
+  t.deepEqual(Object.fromEntries(headers), {
     'accept-encoding': 'deflate, gzip'
   });
 });
@@ -60,7 +60,7 @@ test('`append` converts value to string', t => {
   const result = headers.append('Content-Length', 321);
 
   t.is(result, undefined);
-  t.deepEqual(Object.fromEntries(headers.entries()), {
+  t.deepEqual(Object.fromEntries(headers), {
     'content-length': '321'
   });
 });
@@ -71,7 +71,7 @@ test('`delete` removes element with given name', t => {
   const result = headers.delete('Accept-Encoding');
 
   t.is(result, undefined);
-  t.deepEqual(Object.fromEntries(headers.entries()), {});
+  t.deepEqual(Object.fromEntries(headers), {});
 });
 
 test('`delete` with invalid name throws error', t => {
@@ -156,7 +156,7 @@ test('`set` with non-existing name adds a new entry', t => {
   const result = headers.set('Accept-Encoding', 'deflate');
 
   t.is(result, undefined);
-  t.deepEqual(Object.fromEntries(headers.entries()), {
+  t.deepEqual(Object.fromEntries(headers), {
     'accept-encoding': 'deflate'
   });
 });
@@ -167,7 +167,7 @@ test('`set` with existing name sets a new value', t => {
   const result = headers.set('Accept-Encoding', 'gzip');
 
   t.is(result, undefined);
-  t.deepEqual(Object.fromEntries(headers.entries()), {
+  t.deepEqual(Object.fromEntries(headers), {
     'accept-encoding': 'gzip'
   });
 });
@@ -178,7 +178,7 @@ test('`set` converts value to string', t => {
   const result = headers.set('Content-Length', 321);
 
   t.is(result, undefined);
-  t.deepEqual(Object.fromEntries(headers.entries()), {
+  t.deepEqual(Object.fromEntries(headers), {
     'content-length': '321'
   });
 });
@@ -205,7 +205,7 @@ test('`values` returns value iterator', t => {
 test('`Symbol.iterator` returns entry iterator', t => {
   const headers = new Headers({ 'Accept-Encoding': 'deflate' });
 
-  const iterator = headers.entries();
+  const iterator = headers[Symbol.iterator]();
 
   t.deepEqual(iterator.next().value, ['accept-encoding', 'deflate']);
   t.true(iterator.next().done);
