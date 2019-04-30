@@ -1,33 +1,26 @@
 {
   "name": "vitro",
   "version": "0.1.5",
-  "description": "",
+  "description": "Experimental Fetch API based web framework",
   "main": "lib/index.js",
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "bin": {
+    "vitro": "./bin/vitro.js"
+  },
   "scripts": {
-    "test": "ava test/**",
-    "lint": "eslint lib/** test/**",
+    "test": "ava",
+    "lint": "eslint --ext .js .",
     "coverage": "nyc --reporter=lcov npm run test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ct0r/vitro.git"
-  },
+  "repository": "ct0r/vitro",
   "keywords": [
     "vitro"
   ],
   "author": "ct0r",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ct0r/vitro/issues"
-  },
-  "homepage": "https://github.com/ct0r/vitro#readme",
-  "bin": {
-    "vitro": "./bin/vitro.js"
-  },
-  "files": [
-    "bin",
-    "lib"
-  ],
   "dependencies": {
     "arg": "^4.1.0",
     "content-type": "^1.0.4",
