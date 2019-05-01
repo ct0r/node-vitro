@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { URL } = require('url');
 
 const arg = require('arg');
 
@@ -13,24 +14,28 @@ Usage: vitro [options] [path]
 
 Options:
   -h, --help        Print usage
-  -H, --host        Specify host on which server will run
-  -p, --port        Specify port to listen on (default 3000)
+  -u, --url         Specify the url the server will listen on
   -v, --version     Print version
 `;
 
-const args = arg({
+const spec = {
   '--help': Boolean,
   '-h': '--help',
 
-  '--host': String,
-  '-H': '--host',
-
-  '--port': Number,
-  '-p': '--port',
+  '--url': parseOptions,
+  '-u': '--url',
 
   '--version': Boolean,
   '-v': '--version'
-});
+};
+
+let args;
+try {
+  args = arg(spec);
+} catch (err) {
+  console.log(err.message);
+  process.exit(1);
+}
 
 if (args['--help']) {
   console.log(help);
@@ -41,6 +46,8 @@ if (args['--version']) {
   console.log(version);
   process.exit();
 }
+
+args['--url'] = args['--url'] || { port: 3000 };
 
 let [file] = args._;
 
@@ -70,21 +77,20 @@ if (!fs.existsSync(file)) {
   process.exit(1);
 }
 
-(async file => {
-  let fn;
+function parseOptions(val) {
+  const url = new URL(val);
 
-  try {
-    fn = await require(file);
-  } catch (err) {
-    console.log(`Error when importing file "${file}": ${err.stack}`);
-    process.exit(1);
+  if (url.protocol !== 'http:') {
+    throw new Error(`Invalid protocol: ${url.protocol}`);
   }
 
-  if (typeof fn !== 'function') {
-    console.log(`The file "${file}" does not export a function`);
-    process.exit(1);
-  }
+  return {
+    host: url.hostname,
+    port: url.port || 3000
+  };
+}
 
+function listen(fn, options) {
   const server = serve(fn);
 
   server.on('error', err => {
@@ -92,14 +98,28 @@ if (!fs.existsSync(file)) {
     process.exit(1);
   });
 
-  server.listen(
-    {
-      host: args['--host'],
-      port: args['--port']
-    },
-    () => {
-      const port = server.address().port;
-      console.log(`Accepting connections on port ${port}`);
-    }
-  );
-})(file);
+  server.listen(options, () => {
+    const { port } = server.address();
+    console.log(`Listening on port ${port}`);
+  });
+}
+
+async function start(file, args) {
+  let fn;
+
+  try {
+    fn = await require(file);
+  } catch (err) {
+    console.log(`Error when importing "${file}": ${err.stack}`);
+    process.exit(1);
+  }
+
+  if (typeof fn !== 'function') {
+    console.log(`The "${file}" does not export a function`);
+    process.exit(1);
+  }
+
+  listen(fn, args['--url']);
+}
+
+start(file, args);
