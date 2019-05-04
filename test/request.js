@@ -101,10 +101,10 @@ test('get `referrerPolicy` throws not supported error', t => {
 });
 
 test('get `url` returns url', t => {
-  const url = 'http://www.example.com';
+  const url = '/ct0r/vitro';
   const request = new Request({ url }, {});
 
-  t.is(request.url, url);
+  t.is(request.url, `http://vitro${url}`);
 });
 
 test('`arrayBuffer` throws not supported error', t => {
