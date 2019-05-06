@@ -2,18 +2,12 @@ const { STATUS_CODES } = require('http');
 
 const test = require('ava');
 
-const Body = require('../lib/body');
 const Response = require('../lib/response');
-const { internal } = require('../lib/symbols');
 
 test('get `ok` with succesful status returns true', t => {
-  const response = new Response();
-  response[internal] = { status: 200 };
-
   Object.keys(STATUS_CODES).forEach(key => {
     const status = parseInt(key);
-    const response = new Response();
-    response[internal] = { status };
+    const response = new Response(null, { status });
 
     t.deepEqual(
       { status, ok: response.ok },
@@ -31,17 +25,15 @@ test('get `redirected` throws not supported error', t => {
 });
 
 test('get `status` returns status', t => {
-  const response = new Response();
-  response[internal] = { status: 200 };
+  const response = new Response(null, { status: 500 });
 
-  t.is(response.status, response[internal].status);
+  t.is(response.status, 500);
 });
 
 test('get `statusText` returns statusText', t => {
-  const response = new Response();
-  response[internal] = { statusText: 'OK' };
+  const response = new Response(null, { statusText: 'Custom status text' });
 
-  t.is(response.statusText, response[internal].statusText);
+  t.is(response.statusText, 'Custom status text');
 });
 
 test('get `type` throws not supported error', t => {
@@ -82,8 +74,4 @@ test('`redirect` throws not supported error', t => {
   const err = t.throws(() => response.redirect('http://www.example.com', 302));
 
   t.is(err.message, 'Not supported');
-});
-
-test('`Response` extends `Body`', t => {
-  t.true(new Response() instanceof Body);
 });

@@ -42,7 +42,25 @@ test('`handle` sends given status', async t => {
 });
 
 test('`handle` sends default status', async t => {
+  const fn = () => new Response('A martini. Shaken, not stirred.');
+
+  const url = await getUrl(fn);
+  const res = await fetch(url);
+
+  t.is(res.status, 200);
+});
+
+test('`handle` with empty body and default status sends 204', async t => {
   const fn = () => new Response(null);
+
+  const url = await getUrl(fn);
+  const res = await fetch(url);
+
+  t.is(res.status, 204);
+});
+
+test('`handle` with empty body and custom status sends given status', async t => {
+  const fn = () => new Response(null, { status: 200 });
 
   const url = await getUrl(fn);
   const res = await fetch(url);
@@ -69,7 +87,7 @@ test('`handle` sends default status text', async t => {
 });
 
 test('`handle` sends default body', async t => {
-  const fn = () => new Response(null);
+  const fn = () => new Response();
 
   const url = await getUrl(fn);
   const res = await fetch(url);

@@ -2,7 +2,6 @@ const { Readable } = require('stream');
 
 const test = require('ava');
 
-const Headers = require('../lib/headers');
 const Request = require('../lib/request');
 
 test('get `body` returns req', t => {
