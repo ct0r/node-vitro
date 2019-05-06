@@ -1,6 +1,6 @@
 {
   "name": "vitro",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "description": "Experimental Fetch API based web framework",
   "main": "lib/index.js",
   "files": [
