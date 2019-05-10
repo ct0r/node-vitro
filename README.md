@@ -11,7 +11,7 @@ Experimental [Fetch API] based web framework.
 
 ## Motivation
 
-Today's development of web applications with offline support via [Service Workers][sw] is not so far from standard REST API development, so why we still use frameworks like express, koa etc? Can we replace them by standardized [Request]/[Response] and share more code between frontend and backend. Can awful parts like validation be written once as a standalone middleware and used in REST API server and also in browser within [Service Worker][sw]? We can use one language on a server and in a browser, that's great, but maybe it's time to want more. It's time to have one API ;-)
+Today's development of web applications with offline support via [Service Workers][sw] is not so far from standard REST API development, so why we still use frameworks like express, koa etc? Can we replace them by standardized [Request]/[Response] and share more code between front end and back end. Can awful parts like validation be written once as a standalone middleware and used in REST API server and also in browser within [Service Worker][sw]? We can use one language on a server and in a browser, that's great, but maybe it's time to want more. It's time to have one API ;-)
 
 Inspired by great packages [micro], [koa] and [node-fetch].
 
@@ -54,18 +54,18 @@ Go to http://localhost:3000
 
 Use `vitro --help` for more info.
 
-### Programatic use
+### Programmatic use
 
 ```js
-const vitro = require('vitro')
+const vitro = require('vitro');
+const { Response } = vitro;
 
-const server = vitro(request => 'Welcome to server, Fetch API!')
+const server = vitro(request => new Response('Welcome to server, Fetch API!'));
 
-server.listen(3000)
+server.listen(3000);
 ```
 
 Go to http://localhost:3000
-
 
 [sw]: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API
 [request]: https://developer.mozilla.org/en-US/docs/Web/API/Request
