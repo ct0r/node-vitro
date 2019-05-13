@@ -132,6 +132,17 @@ test('`handle` sends string body', async t => {
   t.is(await res.text(), 'A martini. Shaken, not stirred.');
 });
 
+test('`handle` sets non Response type as body', async t => {
+  const fn = () => 'A martini. Shaken, not stirred.';
+
+  const url = await getUrl(fn);
+  const res = await fetch(url);
+
+  t.is(res.headers.get('content-type'), 'text/plain;charset=utf-8');
+  t.is(res.headers.get('content-length'), '31');
+  t.is(await res.text(), 'A martini. Shaken, not stirred.');
+});
+
 test('`handle` with error thrown by fn sends 500', async t => {
   const fn = () => {
     throw new Error();
