@@ -9,12 +9,6 @@ Experimental [Fetch API] based web framework.
 
 [fetch api]: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
 
-## Motivation
-
-Today's development of web applications with offline support via [Service Workers][sw] is not so far from standard REST API development, so why we still use frameworks like express, koa etc? Can we replace them by standardized [Request]/[Response] and share more code between front end and back end. Can awful parts like validation be written once as a standalone middleware and used in REST API server and also in browser within [Service Worker][sw]? We can use one language on a server and in a browser, that's great, but maybe it's time to want more. It's time to have one API ;-)
-
-Inspired by great packages [micro], [koa] and [node-fetch].
-
 ## Installation
 
 ```
