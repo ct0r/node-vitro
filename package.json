@@ -15,7 +15,7 @@
     "lint": "eslint --ext .js .",
     "coverage": "nyc --reporter=lcov npm run test"
   },
-  "repository": "ct0r/vitro",
+  "repository": "ct0r/node-vitro",
   "keywords": [
     "vitro"
   ],
