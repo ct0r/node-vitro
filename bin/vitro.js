@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { URL } = require('url');
+const fs = require("fs");
+const path = require("path");
+const { URL } = require("url");
 
-const arg = require('arg');
+const arg = require("arg");
 
-const serve = require('../lib');
-const { version } = require('../package');
+const serve = require("../lib");
+const { version } = require("../package");
 
 const help = `
 Usage: vitro [options] [path]
@@ -19,14 +19,14 @@ Options:
 `;
 
 const spec = {
-  '--help': Boolean,
-  '-h': '--help',
+  "--help": Boolean,
+  "-h": "--help",
 
-  '--url': parseOptions,
-  '-u': '--url',
+  "--url": parseOptions,
+  "-u": "--url",
 
-  '--version': Boolean,
-  '-v': '--version'
+  "--version": Boolean,
+  "-v": "--version",
 };
 
 let args;
@@ -37,26 +37,26 @@ try {
   process.exit(1);
 }
 
-if (args['--help']) {
+if (args["--help"]) {
   console.log(help);
   process.exit();
 }
 
-if (args['--version']) {
+if (args["--version"]) {
   console.log(version);
   process.exit();
 }
 
-args['--url'] = args['--url'] || { port: 3000 };
+args["--url"] = args["--url"] || { port: 3000 };
 
 let [file] = args._;
 
 if (!file) {
   try {
-    const packageJson = require(path.resolve(process.cwd(), 'package.json'));
-    file = packageJson.main || 'index.js';
+    const packageJson = require(path.resolve(process.cwd(), "package.json"));
+    file = packageJson.main || "index.js";
   } catch (err) {
-    if (err.code !== 'MODULE_NOT_FOUND') {
+    if (err.code !== "MODULE_NOT_FOUND") {
       console.log(`Could not read "package.json": ${err.message}`);
       process.exit(1);
     }
@@ -64,11 +64,11 @@ if (!file) {
 }
 
 if (!file) {
-  console.log('No path specified');
+  console.log("No path specified");
   process.exit(1);
 }
 
-if (file[0] !== '/') {
+if (file[0] !== "/") {
   file = path.resolve(process.cwd(), file);
 }
 
@@ -80,20 +80,20 @@ if (!fs.existsSync(file)) {
 function parseOptions(val) {
   const url = new URL(val);
 
-  if (url.protocol !== 'http:') {
+  if (url.protocol !== "http:") {
     throw new Error(`Invalid protocol: ${url.protocol}`);
   }
 
   return {
     host: url.hostname,
-    port: url.port || 3000
+    port: url.port || 3000,
   };
 }
 
 function listen(fn, options) {
   const server = serve(fn);
 
-  server.on('error', err => {
+  server.on("error", (err) => {
     console.error(err.stack);
     process.exit(1);
   });
@@ -114,12 +114,12 @@ async function start(file, args) {
     process.exit(1);
   }
 
-  if (typeof fn !== 'function') {
+  if (typeof fn !== "function") {
     console.log(`The "${file}" does not export a function`);
     process.exit(1);
   }
 
-  listen(fn, args['--url']);
+  listen(fn, args["--url"]);
 }
 
 start(file, args);

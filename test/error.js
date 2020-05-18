@@ -1,10 +1,10 @@
-const test = require('ava');
+const test = require("ava");
 
-const createError = require('../lib/error');
+const createError = require("../lib/error");
 
-test('createError sets error fields', t => {
+test("createError sets error fields", (t) => {
   const status = 204;
-  const message = 'some error message';
+  const message = "some error message";
   const original = new Error();
 
   const err = createError(status, message, original);
